@@ -40,8 +40,8 @@ project
     <td>pip install -r requirements.txt</td>
   </tr>
   <tr>
-    <td>streamlit page 실행</td>
-    <td>python run_ocr.py</td>
+    <td>streamlit page 실행</td>
+    <td>python run_ocr.py</td>
   </tr>
 </table>
 
