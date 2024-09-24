@@ -126,20 +126,20 @@ class Google(OCR_API_CLASS_BASE):
 def call_API_dict():
     return {
         "google_general_ocr": Google(
-            project_id = "auto-ocr-430209",
-            processor_id = "9882ea79dc98bc37",
+            project_id = "project_id",
+            processor_id = "processor_id",
             location = "us"
         ),
         "naver_general_ocr": Naver(
-            url = "https://sxu2heqzsb.apigw.ntruss.com/custom/v1/32801/687bae6d56910f03548001a98965c28746ed09535bba4039a9520238a041f88c/general",
-            secret_key = "cWdSVFNYcUpWTm5YWGRab0N3aEV4UGtDUEZIT3hRTEY="
+            url = "url",
+            secret_key = "secret_key"
         ),
         "upstage_general_ocr": Upstage(
-            api_key = "up_cGq0ujs5AuHZyHmIGnjXk8IV9lBIG",
+            api_key = "api_key",
             task= "ocr",
         ),
         "upstage_layout_analysis": Upstage(
-            api_key = "up_cGq0ujs5AuHZyHmIGnjXk8IV9lBIG",
+            api_key = "api_key",
             task= "layout-analysis",
         ),
     }
