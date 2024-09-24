@@ -25,7 +25,7 @@ project
 |requirements|환경 설치 파일|
 |run_ocr.py|streamlit 실행파일(ssh_ocr.py)을 subprocess로 실행|
 |ssh_ocr.py|streamlit 실행파일|
-|ssh_ocr_API.py|OCR API 관련 정보가 저장돼 있다. API틀을 base class로 작성했으며 이후 추가되는 API class는 base class를 상속하여 사용|
+|ssh_ocr_API.py|OCR API 관련 정보가 저장돼 있다. API틀을 base class로 작성했으며 이후 추가되는 API class는 base class를 상속하여 사용|
 |ssh_ocr_utils|압축파일 해제, OCR결과 1줄 정리 등 다양한 utils들이 정의돼 있다.|
 
 # 명령어
