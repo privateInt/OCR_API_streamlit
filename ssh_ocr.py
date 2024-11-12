@@ -67,7 +67,7 @@ def main():
 
                 # ocr 대상 파일 추출
                 try:
-                    target_lst = build_target_lst(
+                    tmp_target_lst = build_target_lst(
                         ext_name = (os.path.splitext(input_file.name)[-1]).replace(".",""),
                         input_file = tmp_file_path,
                         save_path = tmp_folder_path
@@ -81,6 +81,23 @@ def main():
                         error_def = build_target_lst,
                         error_message = e,
                         streamlit_message = "OCR 대상 파일을 검색하는 도중 실패했습니다. 오류가 지속되는 경우 관리자에게 연락 바랍니다."
+                    )
+
+                # ocr 대상 파일 중 pdf의 길이가 긴 경우, 잘라서 다시 대상 파일 추출
+                try:
+                    target_lst = split_pdf(
+                        target_lst = tmp_target_lst,
+                        pages_per_split = 15
+                    )
+                except Exception as e:
+                    add_error_log(
+                        error_root_path = error_root_path,
+                        input_file = input_file,
+                        target_file = "None. this file name is target_file.",
+                        error_API = ocr_engine,
+                        error_def = split_pdf,
+                        error_message = e,
+                        streamlit_message = "OCR 대상 파일중 긴 pdf파일을 잘라내는데 실패했습니다. 오류가 지속되는 경우 관리자에게 연락 바랍니다."
                     )
 
                 # ocr 처리
@@ -120,6 +137,8 @@ def main():
                             error_message = e,
                             streamlit_message = "OCR 결과 정렬에 실패했습니다. 오류가 지속되는 경우 관리자에게 연락 바랍니다."
                         )
+
+                    print(final_text_lst)
 
                     # ocr result를 docx로 저장
                     try:
