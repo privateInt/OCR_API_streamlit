@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Callable
 from docx import Document
 from io import BytesIO
+import PyPDF2
 import streamlit as st
 from datetime import datetime
-from typing import Callable
 import zipfile
 import shutil
 import os
@@ -27,6 +27,43 @@ def build_target_lst(ext_name:str, input_file:str, save_path:str) -> List:
     # 업로드 파일이 pdf 또는 이미지 파일인 경우
     else:
         return [input_file]
+    
+def split_pdf(target_lst: List, pages_per_split: int = 15) -> List:
+    new_target_lst = []
+    for target in target_lst:
+        # pdf파일인 경우에 파일을 읽기
+        if "pdf" in target:
+            with open(target, 'rb') as pdf_file:
+                reader = PyPDF2.PdfReader(pdf_file)
+                total_pages = len(reader.pages)
+
+                # pdf의 총 페이지가 기준 보다 작은 경우 넘어가기
+                if total_pages <= pages_per_split:
+                    new_target_lst.append(target)
+                    continue
+                
+                # pdf의 총 페이지가 기준을 넘어가는 경우, 기준으로 잘라내기
+                elif total_pages > pages_per_split:
+                    # 15페이지씩 나누기
+                    for i in range(0, total_pages, pages_per_split):
+                        writer = PyPDF2.PdfWriter()
+
+                        # 현재 파트의 페이지 추가
+                        for j in range(i, min(i + pages_per_split, total_pages)):
+                            writer.add_page(reader.pages[j])
+
+                        # 파일로 저장
+                        save_path = f"{os.path.splitext(target)[0]}_{i//pages_per_split + 1}.pdf"
+                        with open(save_path, "wb")as f:
+                            writer.write(f)
+
+                        new_target_lst.append(save_path)
+
+        # pdf파일 외에는 그대로 다시 list에 넣기
+        else:
+            new_target_lst.append(target)
+
+    return new_target_lst
 
 def reorder_with_page(input_data:List) -> dict:
     page_dict = {}
@@ -135,7 +172,7 @@ def OCRResult2List(ocr_result: List, file_name:str) -> List:
         for line in one_line_text:
             ocr_result_lst.append(line)
 
-        return ocr_result_lst
+    return ocr_result_lst
     
 def List2Docx(input_lst: List, save_path: str):
     doc = Document()
